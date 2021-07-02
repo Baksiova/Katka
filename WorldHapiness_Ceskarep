@@ -1,0 +1,74 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+def Read():
+    df = pd.read_csv('world-happiness-report-2021.csv') 
+    return df
+
+def RenamingColumns(df, columns: list):
+    df.columns = col
+    return df
+
+def renamingColumns(df, columns:list):
+    df.columns = col
+    return df
+
+col = ["Země", "Regionální ukazatel", "Žebříckové skóre1", "Žebříckové skóre2",
+       "Horní", "Dolní",  "HDP na obyvatele", "Sociální podpora", "Zdravá délka života", "Svoboda rozhodovat se v životě",
+       "Velkorysost",
+       "Vnímání korupce", "Žebřík v dystopii",
+       "HDP na obyvatele",
+       "Sociální podpora",
+       " Zdravá délka života",
+       "Svoboda rozhodovat se pro život",
+       " Velkorysost",
+       "Vnímání korupce",
+       "Dystopia + ostatni" ]
+
+df = Read()
+df = RenamingColumns(df, col)
+
+df.head()
+
+def SelectingAColumn(df, columns: list):
+    DF = df[columns]
+    return DF
+columns = ["Země", "Regionální ukazatel", "HDP na obyvatele", "Sociální podpora",
+           " Zdravá délka života",  " Velkorysost"]
+df = SelectingAColumn(df, columns)
+
+
+def daneforEurope(DF):
+    DF = DF [(DF["Regionální ukazatel"] == "Western Europe")| (DF["Regionální ukazatel"] == "Central and Eastern Europe")]
+    DF = DF.reset_index(drop=True)
+    DF= DF.sort_values("Země")
+    return DF
+
+df  = daneforEurope(df)
+DF_Europe = df[['Země', "HDP na obyvatele", "Sociální podpora",
+           " Zdravá délka života", " Velkorysost"]]
+
+DF_Europe.describe()
+
+def SelectingCountries(df, state):
+    DF = df[df['Země'] == f"{state}"]
+    return DF
+
+DF_CzechRepublic = SelectingCountries(DF_Europe,"Czech Republic" ) 
+DF_Finland = SelectingCountries(DF_Europe, "Finland")
+DF_Denmark = SelectingCountries(DF_Europe, "Denmark")
+DF_Estonia = SelectingCountries(DF_Europe,"Estonia")
+DF_Hungary = SelectingCountries(DF_Europe, "Hungary")
+Europe = pd.concat([DF_CzechRepublic,DF_Finland, DF_Denmark, DF_Estonia, DF_Hungary])
+Europe = Europe.reset_index(drop=True)
+Europe
+
+
+
+
+plt.bar(Europe['Země'],Europe[" Velkorysost"], color="yellow" )
+
+
+
